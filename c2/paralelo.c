@@ -26,5 +26,26 @@ double calc_serie(int ini) {
 
 int main(int argc, char const *argv[])
 {
+	int i, j;
+
+	double partial_result[M];
+	double pi = 0.0;
+
+	//initializing threads
+	pthread_t thread[M];
+	for (i = 0; i < M; i++)
+	{
+		if(pthread_create(&(tid[i]), NULL, &pi_thread, NULL) != 0) {
+			printf("Can't allocate thread\n");
+		}
+	}
+
+	//joinning threads - comming back from return
+	for (int j = 0; j < M; j++)
+	{
+		 pthread_join(tid[j], (void**)&(partial_result[j]));
+		 pi += partial_result[j];
+	}
+	
 	return 0;
 }
