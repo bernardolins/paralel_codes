@@ -12,8 +12,6 @@ double calc_serie(int ini) {
 	int interval = N/M + ini;
 	double result = 0.0;
 
-	printf("%d => %d\n", ini, interval);
-
 	for(i = ini; i < interval; i++) {
 		result += pow(-1.0, i)*(1.0/(2.0*i + 1.0));
 	}
