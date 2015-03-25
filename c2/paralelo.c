@@ -3,7 +3,7 @@
 #include <math.h>
 #include <pthread.h>
 
-#define M 4
+#define M 1
 #define N 10000000
 
 //calculates a fragment of pi serie
@@ -21,8 +21,9 @@ double calc_serie(int ini) {
 
 //thread that calculates pi serie fragment
 void* pi_thread(void* init) {
-	double partial_result = calc_serie(*(int*)init);
-	pthread_exit((void*)&partial_result);
+	double* partial_result = (double*)malloc(sizeof(double));
+	*partial_result = calc_serie(*(int*)init);
+	pthread_exit((void*)partial_result);
 }
 
 int main(int argc, char const *argv[])
