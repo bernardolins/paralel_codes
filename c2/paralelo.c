@@ -4,6 +4,12 @@
 #define M 4
 #define N 10000000
 
+//thread that calculates pi serie fragment
+void* pi_thread(void* init) {
+	calc_serie(init);
+}
+
+
 //calculates a fragment of pi serie
 double calc_serie(int ini) {
 	int i;
