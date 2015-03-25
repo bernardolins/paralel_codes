@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <pthread.h>
 
 #define M 4
 #define N 10000000
-
-//thread that calculates pi serie fragment
-void* pi_thread(void* init) {
-	partial_result = calc_serie(init);
-
-	pthread_exit(&partial_result);
-}
 
 //calculates a fragment of pi serie
 double calc_serie(int ini) {
@@ -24,6 +19,13 @@ double calc_serie(int ini) {
 	return result;
 }
 
+//thread that calculates pi serie fragment
+void* pi_thread(void* init) {
+	double partial_result = calc_serie(*(int*)init);
+
+	pthread_exit(&partial_result);
+}
+
 int main(int argc, char const *argv[])
 {
 	int i, j;
@@ -35,17 +37,20 @@ int main(int argc, char const *argv[])
 	pthread_t thread[M];
 	for (i = 0; i < M; i++)
 	{
-		if(pthread_create(&(tid[i]), NULL, &pi_thread, NULL) != 0) {
+		int argument = i * M/N;
+		if(pthread_create(&(thread[i]), NULL, &pi_thread, (void*)&argument) != 0) {
 			printf("Can't allocate thread\n");
 		}
 	}
 
 	//joinning threads - comming back from return
-	for (int j = 0; j < M; j++)
+	for (j = 0; j < M; j++)
 	{
-		 pthread_join(tid[j], (void**)&(partial_result[j]));
+		 pthread_join(thread[j], (void**)&(partial_result[j]));
 		 pi += partial_result[j];
 	}
-	
+
+	printf("%lf\n", 4.0*pi);
+
 	return 0;
 }
