@@ -5,13 +5,13 @@
 #include <unistd.h>
 #include <ctype.h>
 
-#define M 4
-#define N 10000000
+int n_threads; 
+int serie_length;
 
 //calculates a fragment of pi serie
 double calc_serie(int ini) {
 	int i;
-	int interval = N/M + ini;
+	int interval = serie_length/n_threads + ini;
 	double result = 0.0;
 
 	for(i = ini; i < interval; i++) {
@@ -28,14 +28,12 @@ void* pi_thread(void* init) {
 	pthread_exit(partial_result);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	int i, j;
-	int n_threads = NULL; 
-	int serie_length = NULL;
-	double* partial_result[M];
+	double** partial_result = (double**)malloc(sizeof(double*)*n_threads);
 	double pi = 0.0;
 	char a;
+	
 	//getting arguments from command line
 	while((a = getopt(argc, argv, "t:n:")) != -1) {
 		switch(a) {
@@ -44,21 +42,19 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	int* argument = (int*)malloc(sizeof(int)*n_threads);
-	pthread_t* threads = (pthread_t*)malloc(sizeof(pthread_t)*n_threads);
 	//initializing threads
-	// pthread_t thread[M];
-	for (i = 0; i < M; i++)
-	{
-		argument[i] = i * N/M;
+	int* argument = (int*)malloc(sizeof(int)*n_threads);
+	pthread_t* thread = (pthread_t*)malloc(sizeof(pthread_t)*n_threads);
+
+	for (i = 0; i < n_threads; i++) {
+		argument[i] = i * serie_length/n_threads;
 		if(pthread_create(&(thread[i]), NULL, &pi_thread, (void*)&argument[i]) != 0) {
 			printf("Can't allocate thread\n");
 		}
 	}
 
 	//joinning threads - comming back from return
-	for (j = 0; j < M; j++)
-	{
+	for (j = 0; j < n_threads; j++) {
 		 pthread_join(thread[j], (void**)&(partial_result[j]));
 		 pi += *partial_result[j];
 	}
