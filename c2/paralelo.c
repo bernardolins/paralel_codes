@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #define M 4
 #define N 10000000
@@ -26,12 +28,23 @@ void* pi_thread(void* init) {
 	pthread_exit(partial_result);
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
 	int i, j;
-
+	char* n_threads = NULL; 
+	char* serie_length = NULL;
 	double* partial_result[M];
 	double pi = 0.0;
+	char a;
+	//getting arguments from command line
+	while((a = getopt(argc, argv, "tn:")) != -1) {
+		switch(a) {
+		case 't': n_threads = optarg; break;
+		case 'n': serie_length = optarg; break;
+		}
+	}
+
+	printf("%s - %s\n", n_threads, serie_length);
 
 	int argument[M];
 	//initializing threads
