@@ -13,7 +13,7 @@ double calc_serie(int ini) {
 	double result = 0.0;
 
 	for(i = ini; i < interval; i++) {
-		result += pow(-1.0, i)*(1.0/(2.0*i + 1));
+		result += pow(-1.0, i)*(1.0/(2.0*i + 1.0));
 	}
 
 	return result;
@@ -22,22 +22,21 @@ double calc_serie(int ini) {
 //thread that calculates pi serie fragment
 void* pi_thread(void* init) {
 	double partial_result = calc_serie(*(int*)init);
-
-	pthread_exit(&partial_result);
+	pthread_exit((void*)&partial_result);
 }
 
 int main(int argc, char const *argv[])
 {
 	int i, j;
 
-	double partial_result[M];
+	double* partial_result[M];
 	double pi = 0.0;
 
 	//initializing threads
 	pthread_t thread[M];
 	for (i = 0; i < M; i++)
 	{
-		int argument = i * M/N;
+		int argument = i * N/M;
 		if(pthread_create(&(thread[i]), NULL, &pi_thread, (void*)&argument) != 0) {
 			printf("Can't allocate thread\n");
 		}
@@ -47,7 +46,8 @@ int main(int argc, char const *argv[])
 	for (j = 0; j < M; j++)
 	{
 		 pthread_join(thread[j], (void**)&(partial_result[j]));
-		 pi += partial_result[j];
+		 pi += *partial_result[j];
+		 printf("%0.12lf\n", *partial_result[j]);
 	}
 
 	printf("%lf\n", 4.0*pi);
