@@ -31,24 +31,23 @@ void* pi_thread(void* init) {
 int main(int argc, char *argv[])
 {
 	int i, j;
-	char* n_threads = NULL; 
-	char* serie_length = NULL;
+	int n_threads = NULL; 
+	int serie_length = NULL;
 	double* partial_result[M];
 	double pi = 0.0;
 	char a;
 	//getting arguments from command line
-	while((a = getopt(argc, argv, "tn:")) != -1) {
+	while((a = getopt(argc, argv, "t:n:")) != -1) {
 		switch(a) {
-		case 't': n_threads = optarg; break;
-		case 'n': serie_length = optarg; break;
+		case 't': n_threads = atoi(optarg); break;
+		case 'n': serie_length = atoi(optarg); break;
 		}
 	}
 
-	printf("%s - %s\n", n_threads, serie_length);
-
-	int argument[M];
+	int* argument = (int*)malloc(sizeof(int)*n_threads);
+	pthread_t* threads = (pthread_t*)malloc(sizeof(pthread_t)*n_threads);
 	//initializing threads
-	pthread_t thread[M];
+	// pthread_t thread[M];
 	for (i = 0; i < M; i++)
 	{
 		argument[i] = i * N/M;
