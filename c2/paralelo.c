@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	//joinning threads - comming back from return
+	//joining threads - comming back from return
 	for (j = 0; j < n_threads; j++) {
 		 pthread_join(thread[j], (void**)&(partial_result[j]));
 		 pi += *partial_result[j];
