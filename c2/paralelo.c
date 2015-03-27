@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <ctype.h>
+#include "timer.h"
 
 int n_threads; 
 int serie_length;
@@ -41,6 +42,8 @@ int main(int argc, char *argv[]) {
 		case 'n': serie_length = atoi(optarg); break;
 		}
 	}
+    double time_ini;
+    GET_TIME(time_ini);
 
 	//initializing threads
 	int* argument = (int*)malloc(sizeof(int)*n_threads);
@@ -59,7 +62,12 @@ int main(int argc, char *argv[]) {
 		 pi += *partial_result[j];
 	}
 
-	printf("%0.12lf\n", 4.0*pi);
+    double time_end;
+    GET_TIME(time_end);
 
+    double elapsed_time = time_end - time_ini;    
+    
+    printf("%0.12lf\n", 4.0*pi);
+    printf("paralel elapsed time: %0.12lf\n", elapsed_time);
 	return 0;
 }
