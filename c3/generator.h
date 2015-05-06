@@ -11,3 +11,11 @@ int* generate_random_array(int size, int range) {
 
 	return random_array;
 }
+
+void print_generated(int* array, int size) {
+	printf("Generated array:\n\t");
+	int i;
+	for(i = 0; i < size; i++) {
+		printf("%d ", array[i]);
+	}
+}
