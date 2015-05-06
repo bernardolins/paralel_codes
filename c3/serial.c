@@ -18,19 +18,19 @@ int main(int argc, char *argv[])
 	}
 
 	int* array = generate_random_array(array_size, range);
-
-	print_generated(array, array_size);
 	
 	double time_ini;
     GET_TIME(time_ini);
+
 	int i;
 	for(i = 1; i < array_size; i++) {
 		array[i] += array[i-1];
 	}
+	
 	double time_end;
     GET_TIME(time_end);
 
-	print_generated(array, array_size);
+    printf("-- serial time: %0.12lf\n", time_end - time_ini);
 
 	return 0;
 }
