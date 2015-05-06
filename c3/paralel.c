@@ -36,14 +36,18 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	array = generate_random_array(array_size, range);
+
+	double time_ini;
+    GET_TIME(time_ini);
+
 	results = (int*)malloc(sizeof(int)*n_threads);
 
-	array = generate_random_array(array_size, range);
 
 	pthread_t* thread = (pthread_t*)malloc(sizeof(pthread_t)*n_threads);
 	int* start_count = (int*)malloc(sizeof(int)*n_threads);
 
-	print_generated(array, array_size);
+//	print_generated(array, array_size);
 
 	int i;
 	for (i = 0; i < n_threads; i++) {
@@ -52,8 +56,19 @@ int main(int argc, char *argv[])
 			printf("Can't allocate thread\n");
 		}
 	}
-	printf("\n");
-	print_generated(array, array_size);
+
+//	printf("\n");
+//	print_generated(array, array_size);
+	
+	int j;
+	for(j = 0; j < n_threads; j++) {
+		pthread_join(thread[j], NULL);
+	}
+
+	double time_end;
+    GET_TIME(time_end);
+
+    printf("paralel time: %0.12lf\n", (time_end - time_ini));
 
 	return 0;
 }
