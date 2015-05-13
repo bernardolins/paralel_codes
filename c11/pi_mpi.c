@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include "mpi.h"
 
 double pi_serial(int n) {
   double result = 0.0;
@@ -13,7 +15,9 @@ double pi_serial(int n) {
 }
 
 int main(int argc, char* argv[]) {
-    if(MPI_Init(&argc, &argv) != MPI_SUCCESS) {
+    if(MPI_Init(&argc, &argv) == MPI_SUCCESS) {
+
+    } else {
       printf("-- error while initializing MPI");
     }
 
