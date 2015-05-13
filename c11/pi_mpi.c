@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
     }
 
     if(MPI_Init(&argc, &argv) == MPI_SUCCESS) {
-      MPI_Comm_rank(MPI_COMM_WORD, &rank);
-      MPI_Comm_size(MPI_COMM_WORD, &nproc);
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+      MPI_Comm_size(MPI_COMM_WORLD, &nproc);
     } else {
       printf("-- error while initializing MPI");
     }
