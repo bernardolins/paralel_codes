@@ -18,7 +18,7 @@ double pi_serial(int ini, int end) {
 
 int main(int argc, char* argv[]) {
     int rank, nproc;
-    int pi = 0, local_sum = 0;
+    double pi = 0, local_sum = 0;
     long int serie_length = 0;
 
     char a;
