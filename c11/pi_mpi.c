@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <ctype.h>
 #include "mpi.h"
 
 double pi_serial(int ini, int end) {
@@ -16,8 +18,15 @@ double pi_serial(int ini, int end) {
 
 int main(int argc, char* argv[]) {
     int rank, nproc;
-    int pi = 0;
-    int serie_length = 0;
+    int pi = 0, local_sum = 0;
+    long int serie_length = 0;
+
+    char a;
+    while((a = getopt(argc, argv, "n:")) != -1) {
+      switch(a) {
+      case 'n': serie_length = atoi(optarg); break;
+      }
+    }
 
     if(MPI_Init(&argc, &argv) == MPI_SUCCESS) {
       MPI_Comm_rank(MPI_COMM_WORD, &rank);
@@ -26,7 +35,7 @@ int main(int argc, char* argv[]) {
       printf("-- error while initializing MPI");
     }
 
-    int ini = rank*serie_length/nproc;
+    
 
     MPI_Finalize();
     return 0;
