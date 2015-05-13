@@ -38,12 +38,13 @@ int main(int argc, char* argv[]) {
     int ini = rank*serie_length/nproc;
     int end = ini + serie_length;
 
-    pi_serial(ini, end);
+    local_sum = pi_serial(ini, end);
 
     MPI_Reduce(&local_sum, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if(rank == 0) {
       pi *= 4.0;
+      printf("result: %lf", pi);
     }
 
     MPI_Finalize();
