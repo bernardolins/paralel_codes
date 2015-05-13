@@ -35,7 +35,16 @@ int main(int argc, char* argv[]) {
       printf("-- error while initializing MPI");
     }
 
-    
+    int ini = rank*serie_length/nproc;
+    int end = ini + serie_length;
+
+    pi_serial(ini, end);
+
+    MPI_Reduce(&local_sum, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if(rank == 0) {
+      pi *= 4.0;
+    }
 
     MPI_Finalize();
     return 0;
