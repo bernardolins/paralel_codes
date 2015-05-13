@@ -53,9 +53,9 @@ int main(int argc, char* argv[]) {
 
     if(rank == 0) {
       pi *= 4.0;
-      printf("result: %lf", pi);
+      printf("result: %0.12lf\n", pi);
+      printf("time: %0.12lf\n", time_end-time_ini);
     }
 
-    MPI_Finalize();
     return 0;
 }
