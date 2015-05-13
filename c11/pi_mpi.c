@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include "mpi.h"
+#include "timer.h"
 
 double pi_serial(int ini, int end) {
   double result = 0.0;
@@ -28,6 +29,9 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    double time_ini;
+    GET_TIME(time_ini);
+
     if(MPI_Init(&argc, &argv) == MPI_SUCCESS) {
       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
       MPI_Comm_size(MPI_COMM_WORLD, &nproc);
@@ -41,6 +45,11 @@ int main(int argc, char* argv[]) {
     local_sum = pi_serial(ini, end);
 
     MPI_Reduce(&local_sum, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    MPI_Finalize();
+
+    double time_end;
+    GET_TIME(time_end);
 
     if(rank == 0) {
       pi *= 4.0;
